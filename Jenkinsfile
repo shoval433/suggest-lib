@@ -22,21 +22,21 @@ pipeline{
                 sh 'printenv'
             }
         }
-        stage("A"){
+        stage("is a main"){
+            when{
+                expression{
+                    return GIT_BRANCH.contains('release/')
+                }
+            }
             steps{
-                echo "========executing A========"
+                script{
+                    Ver_Br=sh (script: "echo $GIT_BRANCH | cut -d '/' -f2",
+                    returnStdout: true).trim()
+                    echo "${Ver_Br}"
+                }            
+                
             }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
-            }
+           
         }
     }
     post{
