@@ -39,6 +39,9 @@ pipeline{
             }
             steps{
                 echo "is main"
+                configFileProvider([configFile(fileId: 'my_settings.xml', variable: 'set')]) {
+                    sh "mvn -s ${set} deploy "
+                    }
             }
         }
         //
