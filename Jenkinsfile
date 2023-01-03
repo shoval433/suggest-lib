@@ -41,6 +41,7 @@ pipeline{
                 echo "is main"
             }
         }
+        
         stage("is a release"){
             when{
                 expression{
@@ -60,6 +61,15 @@ pipeline{
                 }     
                 
             }
+           
+        }
+        stage("is a release2"){
+            when{
+                expression{
+                    return GIT_BRANCH.contains('release/')
+                }
+            }
+            
             steps{
                 echo "===============================================Executing Push==============================================="
                 configFileProvider([configFile(fileId: 'my_settings.xml', variable: 'set')]) {
