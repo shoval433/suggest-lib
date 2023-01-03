@@ -3,13 +3,16 @@ pipeline{
 
     options {
         timestamps()
-        gitLabConnection('my-repo') 
-      
+        gitLabConnection('my-repo')  
+    }
+    tools {
+        maven 'my-work-maven'
+        jdk 'java-8-work'
     }
     stages{
         stage("CHEKOUT"){
             steps{
-                echo "===================================================================================Executing CHEKOUT==================================================================================="
+                echo "===============================================Executing CHEKOUT==============================================="
                 // echo sh(script: 'env|sort', returnStdout: true)
                 // sh 'printenv'
                 //  echo "===================================================================================Executing deleteDir()==================================================================================="
@@ -22,6 +25,22 @@ pipeline{
                 // sh 'printenv'
             }
         }
+        stage("Building for all"){
+            steps{
+                sh "mvn verify"
+            }
+
+        }
+        stage("is main"){
+            when{
+                expression{
+                    return BRANCH_IS_PRIMARY
+                }
+            }
+            steps{
+                echo "is main"
+            }
+        }
         stage("is a release"){
             when{
                 expression{
@@ -29,6 +48,7 @@ pipeline{
                 }
             }
             steps{
+                echo "===============================================Executing Calc==============================================="
                 script{
                     Ver_Br=sh (script: "echo $GIT_BRANCH | cut -d '/' -f2",
                     returnStdout: true).trim()
@@ -37,8 +57,24 @@ pipeline{
                     returnStdout: true).trim()
                     echo "${Ver_Calc}"
 
-                }            
+                }     
                 
+            }
+            steps{
+                echo "===============================================Executing Push==============================================="
+                configFileProvider([configFile(fileId: 'my_settings.xml', variable: 'set')]) {
+                    sh "mvn versions:set -DnewVersion=${Ver_Calc} && mvn -s ${set} deploy "
+                    }
+                script{
+                    withCredentials([gitUsernamePassword(credentialsId: '2053d2c3-e0ab-4686-b031-9a1970106e8d', gitToolName: 'Default')]){
+                            // sh "git checkout release/${VER}"
+                            sh "git tag $Ver_Calc"
+                            sh "git push  origin $Ver_Calc"
+                    
+                        }
+                }
+
+
             }
            
         }
