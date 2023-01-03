@@ -1,3 +1,4 @@
+//testsave
 pipeline{
     agent any
     triggers{
@@ -29,6 +30,7 @@ pipeline{
         }
         stage("Building for all"){
             steps{
+                 echo "===============================================Executing Building for all==============================================="
                 sh "mvn verify"
             }
 
@@ -40,6 +42,7 @@ pipeline{
                 }
             }
             steps{
+                 echo "===============================================Executing is main==============================================="
                 echo "is main"
                 configFileProvider([configFile(fileId: 'my_settings.xml', variable: 'set')]) {
                     sh "mvn -s ${set} deploy "
@@ -95,14 +98,33 @@ pipeline{
         }
     }
     post{
-        always{
-            echo "========always========"
-        }
+
         success{
-            echo "========pipeline executed successfully ========"
+            script{
+                
+                script{
+                    emailext    recipientProviders: [culprits()],
+                    subject: 'yes', body: 'ooooononononn',  
+                    attachLog: true
+                }     
+            
+            
+                gitlabCommitStatus(connection: gitLabConnection(gitLabConnection: 'my-repo' , jobCredentialId: ''),name: 'report'){
+                    echo "hi you"
+                }
+            }
         }
         failure{
-            echo "========pipeline execution failed========"
+            script{
+                emailext   recipientProviders: [culprits()],
+                subject: 'YOU ARE BETTER THEN THAT !!! ', body: 'Dear programmer, you have broken the code, you are asked to immediately sit on the chair and leave the coffee corner.',  
+                attachLog: true
+            }      
+
+            gitlabCommitStatus(connection: gitLabConnection(gitLabConnection: 'my-repo' , jobCredentialId: ''),name: 'report'){
+                echo "hi you"
+            }
+
         }
     }
 }
