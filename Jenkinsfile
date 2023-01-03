@@ -1,6 +1,8 @@
 pipeline{
     agent any
-
+    triggers{
+        pollSCM '* * * * *'
+    }
     options {
         timestamps()
         gitLabConnection('my-repo')  
