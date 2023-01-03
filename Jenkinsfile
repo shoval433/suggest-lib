@@ -33,7 +33,7 @@ pipeline{
                     Ver_Br=sh (script: "echo $GIT_BRANCH | cut -d '/' -f2",
                     returnStdout: true).trim()
                     echo "${Ver_Br}"
-                    Ver_Calc=sh (script: "base calc.sh ${Ver_Br}",
+                    Ver_Calc=sh (script: "bash calc.sh ${Ver_Br}",
                     returnStdout: true).trim()
                     echo "${Ver_Calc}"
 
