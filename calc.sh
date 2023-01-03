@@ -2,7 +2,7 @@
 
 Version=$(git describe --tags | cut -d '-' -f1 | awk -F. -v OFS=. '{$NF += 1 ; print }')
 
-if [ "$Version" = ""];then
+if [ "${Version}" = "" ];then
 Version="$1.1"
-if
+fi
 echo $Version
