@@ -34,14 +34,14 @@ pipeline{
         stage("is main"){
             when{
                 expression{
-                    return GIT_BRANCH.contains('main') || BRANCH_IS_PRIMARY  
+                    return GIT_BRANCH.contains('main') 
                 }
             }
             steps{
                 echo "is main"
             }
         }
-        
+        //
         stage("is a release"){
             when{
                 expression{
@@ -79,7 +79,7 @@ pipeline{
                     withCredentials([gitUsernamePassword(credentialsId: '2053d2c3-e0ab-4686-b031-9a1970106e8d', gitToolName: 'Default')]){
                             // sh "git checkout release/${VER}"
                             sh "git tag $Ver_Calc"
-                            sh "git push  origin $Ver_Calc"
+                            sh "git push origin $Ver_Calc"
                     
                         }
                 }
