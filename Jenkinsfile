@@ -107,7 +107,10 @@ pipeline{
             script{
                 
                 script{
-                    emailext    recipientProviders: [culprits()],
+                    // emailext    recipientProviders: [culprits()],
+                    // subject: 'yes', body: 'ooooononononn',  
+                    // attachLog: true
+                    emailext to: 'shoval123055@gmail.com',
                     subject: 'yes', body: 'ooooononononn',  
                     attachLog: true
                 }     
@@ -120,10 +123,14 @@ pipeline{
         }
         failure{
             script{
-                emailext   recipientProviders: [culprits()],
+                // emailext   recipientProviders: [culprits()],
+                // subject: 'YOU ARE BETTER THEN THAT !!! ', body: 'Dear programmer, you have broken the code, you are asked to immediately sit on the chair and leave the coffee corner.',  
+                // attachLog: true
+                emailext   to: 'shoval123055@gmail.com',
                 subject: 'YOU ARE BETTER THEN THAT !!! ', body: 'Dear programmer, you have broken the code, you are asked to immediately sit on the chair and leave the coffee corner.',  
                 attachLog: true
             }      
+            to: 'shoval123055@gmail.com'
 
             gitlabCommitStatus(connection: gitLabConnection(gitLabConnection: 'my-repo' , jobCredentialId: ''),name: 'report'){
                 echo "ahh"
