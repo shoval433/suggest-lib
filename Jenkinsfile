@@ -30,7 +30,7 @@ pipeline{
         }
         stage("Building for all"){
             steps{
-                 echo "===============================================Executing Building for all==============================================="
+                echo "===============================================Executing Building for all==============================================="
                 sh "mvn verify"
             }
 
@@ -42,22 +42,24 @@ pipeline{
                 }
             }
             steps{
-                 echo "===============================================Executing is main==============================================="
+                echo "===============================================Executing is main==============================================="
                 echo "is main"
+                //send him to artiy
+                // withCredentials([gitUsernamePassword()])
                 configFileProvider([configFile(fileId: 'my_settings.xml', variable: 'set')]) {
                     sh "mvn -s ${set} deploy "
                     }
             }
         }
         //
-        stage("is a release"){
+        stage("calc tag"){
             when{
                 expression{
                     return GIT_BRANCH.contains('release/')
                 }
             }
             steps{
-                echo "===============================================Executing Calc==============================================="
+                echo "===============================================Executing calc tag==============================================="
                 script{
                     Ver_Br=sh (script: "echo $GIT_BRANCH | cut -d '/' -f2",
                     returnStdout: true).trim()
@@ -71,7 +73,7 @@ pipeline{
             }
            
         }
-        stage("is a release2"){
+        stage("is a release"){
             when{
                 expression{
                     return GIT_BRANCH.contains('release/')
@@ -80,10 +82,12 @@ pipeline{
             
             steps{
                 echo "===============================================Executing Push==============================================="
+                // withCredentials([gitUsernamePassword()])
                 configFileProvider([configFile(fileId: 'my_settings.xml', variable: 'set')]) {
                     sh "mvn versions:set -DnewVersion=${Ver_Calc} && mvn -s ${set} deploy "
                     }
                 script{
+                
                     withCredentials([gitUsernamePassword(credentialsId: '2053d2c3-e0ab-4686-b031-9a1970106e8d', gitToolName: 'Default')]){
                             // sh "git checkout release/${VER}"
                             sh "git tag $Ver_Calc"
@@ -110,7 +114,7 @@ pipeline{
             
             
                 gitlabCommitStatus(connection: gitLabConnection(gitLabConnection: 'my-repo' , jobCredentialId: ''),name: 'report'){
-                    echo "hi you"
+                    echo "that good"
                 }
             }
         }
@@ -122,7 +126,7 @@ pipeline{
             }      
 
             gitlabCommitStatus(connection: gitLabConnection(gitLabConnection: 'my-repo' , jobCredentialId: ''),name: 'report'){
-                echo "hi you"
+                echo "ahh"
             }
 
         }
