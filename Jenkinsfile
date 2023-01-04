@@ -1,7 +1,7 @@
 //testsave
 pipeline{
     agent any
-   
+   //
     options {
         timestamps()
         gitLabConnection('my-repo')  
@@ -14,16 +14,9 @@ pipeline{
         stage("CHEKOUT"){
             steps{
                 echo "===============================================Executing CHEKOUT==============================================="
-                // echo sh(script: 'env|sort', returnStdout: true)
-                // sh 'printenv'
-                //  echo "===================================================================================Executing deleteDir()==================================================================================="
                 deleteDir()
-                // echo sh(script: 'env|sort', returnStdout: true)
-                // sh 'printenv'
-                // echo "===================================================================================Executing checkout scm==================================================================================="
                 checkout scm
-                // echo sh(script: 'env|sort', returnStdout: true)
-                // sh 'printenv'
+              
             }
         }
         stage("Building for all"){
@@ -45,7 +38,7 @@ pipeline{
                 //send him to artiy
                 // withCredentials([gitUsernamePassword()])
                 configFileProvider([configFile(fileId: 'my_settings.xml', variable: 'set')]) {
-                    sh "mvn -s ${set} deploy "
+                    sh "mvn -s ${set} deploy"
                     }
             }
         }
