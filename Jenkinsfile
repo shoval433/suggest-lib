@@ -111,7 +111,7 @@ pipeline{
                     // subject: 'yes', body: 'ooooononononn',  
                     // attachLog: true
                     emailext to: 'shoval123055@gmail.com',
-                    subject: 'yes', body: 'ooooononononn',  
+                    subject: 'Congratulations!', body: 'Well, this time you didnt mess up',  
                     attachLog: true
                 }     
             
