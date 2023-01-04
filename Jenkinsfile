@@ -29,7 +29,7 @@ pipeline{
         stage("is main"){
             when{
                 expression{
-                    return GIT_BRANCH.contains('main') 
+                    return ("${GIT_BRANCH}"=='main') 
                 }
             }
             steps{
