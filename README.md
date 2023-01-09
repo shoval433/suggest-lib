@@ -1,6 +1,9 @@
 Suggest-lib Pipeline
 ===
 #### This repository contains the suggest-lib pipeline. The pipeline is used to build, test, and release an application.
+#### architecture
+
+![img](suggest.jpg)
 
 The pipeline includes the following steps:
 ===
